@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteo Navideño</title>
+    <style>
+        body {
+            background-color: #3cb371; /* Fondo verde */
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Evita scroll cuando caen copos */
+        }
+
+        .header {
+            background-color: #c71f1f;
+            color: white;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .form-container {
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .form-container input[type="number"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1em;
+            border: 2px solid #c71f1f;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            background-color: #c71f1f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #a61616;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #c71f1f;
+            font-weight: bold;
+            position: relative;
+        }
+
+        footer {
+            margin-top: 50px;
+            background-color: #c71f1f;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: white;
+            font-size: 1em;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        .lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .light {
+            position: absolute;
+            border-radius: 50%;
+            background-color: red;
+            animation: blink 1.5s infinite alternate;
+        }
+
+        /* Efectos de celebración */
+        .celebration {
+            animation: shine 1s ease-in-out, pop 1s ease-in-out forwards;
+        }
+
+        @keyframes shine {
+            0% {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0000, 0 0 40px #ff0000, 0 0 50px #ff0000, 0 0 75px #ff0000;
+            }
+            100% {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff, 0 0 75px #fff;
+            }
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Confeti */
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: #ff5733;
+            animation: confettiFall 2s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Sorteo Navideño</h1>
+        <p>Introduce tu número y descubre tu premio especial</p>
+    </header>
+
+    <div class="form-container">
+        <form id="sorteoForm">
+            <input type="number" id="numero" placeholder="Introduce un número..." required>
+            <button type="button" onclick="generarPremio()">Obtener Premio</button>
+        </form>
+        <div class="result" id="resultado"></div>
+    </div>
+
+    <footer>
+        🎄 ¡Felices Fiestas! 🎅
+    </footer>
+
+    <div class="lights" id="lights"></div>
+
+    <script>
+        function generarPremio() {
+            const numero = document.getElementById("numero").value;
+
+            if (numero === "") {
+                document.getElementById("resultado").innerText = "Por favor, introduce un número.";
+                return;
+            }
+
+            const premios = [
+                "Un viaje al Polo Norte",
+                "Una bicicleta nueva",
+                "Un juego de mesa",
+                "Un televisor de última generación",
+                "Un bono para un spa",
+                "Un set de libros",
+                "Un patinete eléctrico",
+                "Una caja de chocolates gourmet",
+                "Una tarjeta de regalo",
+                "Un muñeco de nieve de peluche",
+                "Una cena en un restaurante de lujo",
+                "Un suéter navideño",
+                "Un kit de decoración navideña",
+                "Un vale por una película en el cine",
+                "Unas entradas para un parque temático",
+                "Un reloj inteligente",
+                "Una cámara instantánea",
+                "Un altavoz Bluetooth",
+                "Un paquete de galletas navideñas",
+                "Una taza personalizada",
+                "Un paquete de calcetines navideños",
+                "Una caja de vino exclusivo",
+                "Unas luces LED para el árbol",
+                "Un set de velas aromáticas",
+                "Un gorro de Papá Noel",
+                "Un calendario de adviento",
+                "Un peluche gigante",
+                "Una consola de videojuegos",
+                "Unas entradas para un concierto",
+                "Un kit de cocina navideña",
+                "Unas bufandas de lana",
+                "Un set de juegos para niños",
+                "Una cesta navideña",
+                "Unas entradas para el teatro",
+                "Un horno portátil",
+                "Un drone pequeño",
+                "Un libro de recetas",
+                "Un paquete de mermeladas gourmet",
+                "Un álbum de fotos personalizado",
+                "Una lámpara de noche",
+                "Un set de herramientas para manualidades",
+                "Unas entradas para un espectáculo de magia",
+                "Un karaoke portátil",
+                "Un juguete educativo",
+                "Un set de pintura artística",
+                "Unos auriculares inalámbricos",
+                "Un vale para un desayuno sorpresa",
+                "Unas plantas decorativas",
+                "Un masajeador eléctrico",
+                "Un reloj de pared",
+                "Un vale por clases de baile",
+                "Un viaje sorpresa",
+                "Unas zapatillas de estar en casa",
+                "Un pijama navideño",
+                "Un set de tazas navideñas",
+                "Un pack de cervezas artesanales",
+                "Un bolso de invierno",
+                "Un libro de cuentos",
+                "Un paraguas elegante",
+                "Un organizador de escritorio",
+                "Un vale para comida rápida",
+                "Un estuche de maquillaje",
+                "Unas gafas de sol",
+                "Un abrigo de invierno",
+                "Una mini cafetera",
+                "Unos guantes de cuero",
+                "Un cinturón elegante",
+                "Una botella térmica",
+                "Unas botellas de vino",
+                "Unas alfombras decorativas",
+                "Un vale para tienda de ropa",
+                "Un perfume exclusivo",
+                "Unas cortinas navideñas",
+                "Unos accesorios para mascotas",
+                "Un paquete de queso gourmet",
+                "Un set de cuchillos de cocina",
+                "Un organizador de ropa",
+                "Un despertador inteligente",
+                "Una bata de baño",
+                "Unas joyas de plata",
+                "Unos discos de vinilo",
+                "Un altavoz inteligente",
+                "Unas figuras de colección",
+                "Unos calcetines térmicos",
+                "Un teclado mecánico",
+                "Un mouse ergonómico",
+                "Unos boletos de avión",
+                "Una tablet moderna",
+                "Una mochila resistente",
+                "Unas clases de idiomas",
+                "Unas tarjetas navideñas personalizadas",
+                "Un paquete de té gourmet",
+                "Unas decoraciones personalizadas",
+                "Unas toallas suaves",
+                "Unos cojines decorativos",
+                "Un árbol de Navidad artificial",
+                "Unas lámparas LED portátiles",
+                "Unas bufandas y guantes a juego",
+                "Un kit de jardinería",
+                "Unas herramientas para barbacoa",
+                "Unas copas de cristal",
+                "Una experiencia de glamping",
+                "Un masaje relajante",
+                "Unos utensilios de cocina premium"
+            ];
+
+            const premio = premios[Math.floor(Math.random() * premios.length)];
+            const resultado = document.getElementById("resultado");
+            resultado.innerText = `¡Felicidades! Tu premio es: ${premio}`;
+
+            // Agregar efecto de celebración
+            resultado.classList.add("celebration");
+
+            // Generar confeti
+            generarConfeti();
+
+            // Resetear clase de celebración después de un tiempo
+            setTimeout(() => {
+                resultado.classList.remove("celebration");
+            }, 2000);
+        }
+
+        // Función para generar confeti
+        function generarConfeti() {
+            const cantidad = 100;
+            const body = document.body;
+
+            for (let i = 0; i < cantidad; i++) {
+                const confeti = document.createElement("div");
+                confeti.classList.add("confetti");
+                confeti.style.left = `${Math.random() * 100}vw`;
+                confeti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                confeti.style.animationDelay = `${Math.random() * 5}s`;
+                body.appendChild(confeti);
+
+                // Eliminar confeti después de la animación
+                confeti.addEventListener('animationend', function() {
+                    confeti.remove();
+                });
+            }
+        }
+
+        function generarLuces() {
+            const cantidad = 50;
+            const lightsContainer = document.getElementById('lights');
+
+            for (let i = 0; i < cantidad; i++) {
+                const light = document.createElement('div');
+                light.classList.add('light');
+                light.style.top = `${Math.random() * 100}vh`;
+                light.style.left = `${Math.random() * 100}vw`;
+                light.style.backgroundColor = getRandomColor();
+                light.style.width = `${Math.random() * 10 + 5}px`;
+                light.style.height = `${Math.random() * 10 + 5}px`;
+                light.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                lightsContainer.appendChild(light);
+            }
+        }
+
+        function getRandomColor() {
+            const colors = ['#ff5733', '#33ff57', '#3357ff', '#f0f033', '#ff33f0'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Llamar a la función para generar luces al cargar
+        generarLuces();
+    </script>
+</body>
+</html>
